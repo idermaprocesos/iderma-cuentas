@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Iderma.UserAdmin (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Iderma.UserAdmin (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

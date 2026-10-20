@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Iderma_UserAdmin.UsersPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Iderma_UserAdmin"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Iderma.Core.Models"
+    Background="Transparent"
+    mc:Ignorable="d">
+
+    <Grid Padding="32,12,32,20" ColumnSpacing="16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid RowSpacing="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Spacing="4">
+                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Usuarios" />
+                <TextBlock
+                    x:Name="CountText"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="Cuentas del launcher" />
+            </StackPanel>
+
+            <ListView
+                x:Name="UsersList"
+                Grid.Row="1"
+                Background="Transparent"
+                SelectionChanged="UsersList_SelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:UserListItem">
+                        <Grid Padding="0,6" ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <PersonPicture
+                                Width="36"
+                                Height="36"
+                                DisplayName="{x:Bind DisplayName}" />
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind DisplayName}" />
+                                <TextBlock
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Text="{x:Bind Username}" />
+                                <TextBlock
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Text="{x:Bind Detail}" />
+                                <TextBlock
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Text="{x:Bind Avisos}" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Button
+                Grid.Row="2"
+                HorizontalAlignment="Stretch"
+                Click="NewButton_Click"
+                Style="{StaticResource AccentButtonStyle}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontSize="14" Glyph="&#xE710;" />
+                    <TextBlock Text="Nuevo usuario" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <Border Grid.Column="1" Style="{StaticResource FluentCardStyle}">
+            <Grid RowSpacing="12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Spacing="4">
+                    <TextBlock
+                        x:Name="EditorTitle"
+                        Style="{StaticResource SubtitleTextBlockStyle}"
+                        Text="Nuevo usuario" />
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="Los cambios se guardan en el mismo archivo que usa el launcher." />
+                </StackPanel>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="12">
+                        <InfoBar
+                            x:Name="MessageBar"
+                            IsClosable="True"
+                            IsOpen="False" />
+                        <TextBox
+                            x:Name="UsernameBox"
+                            Header="Usuario"
+                            PlaceholderText="Usuario" />
+                        <TextBox
+                            x:Name="DisplayNameBox"
+                            Header="Nombre visible"
+                            PlaceholderText="Nombre y apellido" />
+                        <ComboBox
+                            x:Name="RoleBox"
+                            HorizontalAlignment="Stretch"
+                            Header="Rol"
+                            IsEditable="True"
+                            PlaceholderText="Rol" />
+                        <PasswordBox
+                            x:Name="PasswordBox"
+                            Header="Contraseña"
+                            PlaceholderText="Mínimo 10 caracteres, letra y número" />
+                        <ToggleSwitch
+                            x:Name="ActiveSwitch"
+                            Header="Cuenta activa"
+                            IsOn="True"
+                            OffContent="Inactiva"
+                            OnContent="Activa" />
+                        <ToggleSwitch
+                            x:Name="SettingsSwitch"
+                            Header="Botón de configuración"
+                            IsOn="True"
+                            OffContent="Oculto"
+                            OnContent="Visible" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Si está oculto, este perfil no ve el botón Configuración en el launcher."
+                            TextWrapping="WrapWholeWords" />
+                        <ToggleSwitch
+                            x:Name="ExportLoginsSwitch"
+                            Header="Exportar registro de inicios"
+                            IsOn="True"
+                            OffContent="Sin exportación"
+                            OnContent="Puede exportar" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Cada inicio de sesión guarda un código interno, el usuario, la fecha y los datos del equipo. Este interruptor decide si el perfil ve el botón para exportar ese registro."
+                            TextWrapping="WrapWholeWords" />
+                        <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="Notificaciones" />
+                        <ToggleSwitch
+                            x:Name="NotifyLogisticaSwitch"
+                            Header="Notificaciones de logística"
+                            IsOn="True"
+                            OffContent="Apagadas"
+                            OnContent="Encendidas"
+                            Toggled="NotifyLogisticaSwitch_Toggled" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Si está apagado, este perfil no recibe avisos de Windows de solicitudes en la app de logística."
+                            TextWrapping="WrapWholeWords" />
+                        <ToggleSwitch
+                            x:Name="NotifyClinicaSwitch"
+                            Header="Notificaciones de clínica"
+                            IsOn="True"
+                            OffContent="Apagadas"
+                            OnContent="Encendidas"
+                            Toggled="NotifyClinicaSwitch_Toggled" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Si está apagado, este perfil no recibe avisos de Windows cuando logística acepta o deniega un pedido."
+                            TextWrapping="WrapWholeWords" />
+                        <ToggleSwitch
+                            x:Name="NotifyBaseDeDatosSwitch"
+                            Header="Notificaciones de base de datos"
+                            IsOn="True"
+                            OffContent="Apagadas"
+                            OnContent="Encendidas"
+                            Toggled="NotifyBaseDeDatosSwitch_Toggled" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Si está apagado, este perfil no recibe avisos de Windows de autorizaciones en la app de base de datos."
+                            TextWrapping="WrapWholeWords" />
+                        <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="Acceso a aplicaciones" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Marca las aplicaciones de este perfil. La lista sale del catálogo actual del launcher."
+                            TextWrapping="WrapWholeWords" />
+                        <ItemsControl x:Name="AppsList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="local:AppAccessItem">
+                                    <Border
+                                        Margin="0,0,0,8"
+                                        Padding="12,8"
+                                        Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                                        CornerRadius="{ThemeResource ControlCornerRadius}">
+                                        <CheckBox IsChecked="{x:Bind IsGranted, Mode=TwoWay}">
+                                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                                <Border
+                                                    Width="28"
+                                                    Height="28"
+                                                    CornerRadius="{ThemeResource ControlCornerRadius}">
+                                                    <Image Source="{x:Bind LogoPath}" Stretch="UniformToFill" />
+                                                </Border>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{x:Bind Name}" />
+                                                    <TextBlock
+                                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                        Style="{StaticResource CaptionTextBlockStyle}"
+                                                        Text="{x:Bind Description}"
+                                                        TextWrapping="WrapWholeWords" />
+                                                    <TextBlock
+                                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                                        Style="{StaticResource CaptionTextBlockStyle}"
+                                                        Text="{x:Bind StatusLabel}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </CheckBox>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <StackPanel
+                    Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <Button Click="LogoutSessionButton_Click" Content="Cerrar sesión" />
+                    <Button Click="DeleteButton_Click" Content="Eliminar" />
+                    <Button Click="CancelButton_Click" Content="Cancelar" />
+                    <Button
+                        Click="SaveButton_Click"
+                        Content="Guardar"
+                        Style="{StaticResource AccentButtonStyle}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>
